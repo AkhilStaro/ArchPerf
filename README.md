@@ -15,90 +15,108 @@ cd ArchPerf
 
 ### System Description (My Edits, New Fatures)
 This is my edited version of ArchTitus
+
 I've completely removed the kde customization, and added new features:
-Being able to choose between different audio servers
-Able to choose between DHClient and NetworkManager
-The script also asks you if you want to use printer and bluetooth with the device
-The script also lets you choose which fonts and extra packages you want to install
-The script also install python and java8 libraries which you might need later to run some applications
-The scripts have been rewritten in a organised manner and with simplified comments
-The old ArchTitus script used to install all the packages needed by efi even when you didn't use efi and thats ruins the point of the script, the script is expected to install arch with all the packages you need and not install all the packages you don't need, well I fixed it and now it only install efibootmgr if you are using uefi.
-the script has removed all the aur packages because it was pretty much bloat.
+
+1. Being able to choose between different audio servers
+
+2. Able to choose between DHClient and NetworkManager
+
+3. The script also asks you if you want to use printer and bluetooth with the device
+
+4. The script also lets you choose which fonts and extra packages you want to install
+
+5. The script also install python and java8 libraries which you might need later to run some applications
+
+6. The scripts have been rewritten in a organised manner and with simplified comments
+
+7. The script only install efibootmgr if you are using uefi.
+
+8. the script has removed all the aur packages because it was pretty much bloat.
 
 
 The main feature about this is that it removes all the bloat packages including :
+
 cmatrix
+
 cronie
+
 All The Fonts Titus added which were uneeded
 
-The full list of packages this script install :
-mesa
-xorg
-xorg-server
-xorg-apps
-xorg-drivers
-xorg-xkill
-xorg-xinit
-xterm
-binutils
-dosfstools
-linux-headers
-usbutils
-autoconf
-automake
-xdg-user-dirs
-bison
-ntp
---END OF MINIMAL INSTALL--
-bash-completion
-bridge-utils
-btrfs-progs
-dialog
-dnsmasq
-dtc
-exfat-utils
-flex
-fuse2
-fuse3
-gcc
-gparted
-gptfdisk
-grub-customizer
-gst-plugins-good
-htop
-libdvdcss
-libtool
-lsof
-lzop
-m4
-make
-neofetch
-ntfs-3g
-ntp
-openbsd-netcat
-openssh
-p7zip
-patch
-pkgconf
-ufw
-unrar
-unzip
-which
-python-notify2
-python-psutil
-python-pyqt5
-python-pip
-java-environment-common
-java-runtime-common
-jbig2dec
-jdk8-openjdk
-jfsutils
+The full list of packages this script install :          
+mesa            
+xorg        
+xorg-server            
+xorg-apps             
+xorg-drivers           
+xorg-xkill             
+xorg-xinit           
+xterm          
+binutils           
+dosfstools             
+linux-headers               
+usbutils           
+autoconf        
+automake       
+xdg-user-dirs            
+bison             
+ntp               
+--END OF MINIMAL INSTALL--                
+bash-completion           
+bridge-utils            
+btrfs-progs                        
+dialog        
+dnsmasq          
+dtc          
+exfat-utils         
+flex           
+fuse2         
+fuse3              
+gcc          
+gparted         
+gptfdisk       
+grub-customizer            
+gst-plugins-good           
+htop              
+libdvdcss            
+libtool          
+lsof           
+lzop        
+m4        
+make          
+neofetch        
+ntfs-3g             
+ntp             
+openbsd-netcat           
+openssh       
+p7zip            
+patch         
+pkgconf          
+ufw            
+unrar          
+unzip        
+which          
+python-notify2         
+python-psutil        
+python-pyqt5        
+python-pip         
+java-environment-common           
+java-runtime-common           
+jbig2dec          
+jdk8-openjdk         
+jfsutils       
 jre8-openjdk
-jre8-openjdk-headless
-js78
-json-c
-json-glib
+jre8-openjdk-headless             
+js78             
+json-c           
+json-glib             
 
+### Future Features
+1. The spript will let you choose your desired shell and assign it as default
+2. The script will let you choose window managers too
+3. The script will let you choose a config to appy on your installation
+4. Not sure about this one but, if possible the script will let you clone your own config files from github and appy them
+5. Add my own rice(customization) of Qtile+xfce hybrid
 
 ### No Wifi
 
