@@ -269,6 +269,16 @@ read -rep "Please enter your hostname: " nameofmachine
 set_option NAME_OF_MACHINE $nameofmachine
 }
 
+needed_fonts () {
+read -p "Please enter your desired fonts to install(pacman only, seperated with spaces): " fonts
+set_option FONTS $fonts 
+}
+
+extra_packages () {
+read -p "Please enter your desired packges to install(pacman only, seperated with spaces): " expackages
+set_option EXPACKAGES $expackages 
+}
+
 aurhelper () {
   # Let the user choose AUR helper from predefined list
   echo -ne "Please enter your desired AUR helper:\n"
@@ -295,6 +305,38 @@ networkset () {
   set_option NETWORK_SET $network_set
 }
 
+audioserv () {
+  echo -ne "Please select your desired Audio Server:\n"
+  options=(pulseaudio pipewire)
+  select_option $? 4 "${options[@]}"
+  audio_serv=${options[$?]}
+  set_option audio_serv $audio_serv
+}
+
+bluetooth () {
+  echo -ne "Do you want Bluetooth on this device:\n"
+  options=(Yes No)
+  select_option $? 4 "${options[@]}"
+  bluetooth=${options[$?]}
+  set_option BLUETOOTH $bluetooth
+}
+
+printercomp () {
+  echo -ne "Do you want to use Printer on this device:\n"
+  options=(Yes No)
+  select_option $? 4 "${options[@]}"
+  printer_comp=${options[$?]}
+  set_option PRINTING $printer_comp
+}
+
+dualboot () {
+  echo -ne "Are you dual booting on this device:\n"
+  options=(Yes No)
+  select_option $? 4 "${options[@]}"
+  dual_boot=${options[$?]}
+  set_option DUALBOOT $dual_boot
+}
+
 installtype () {
   echo -ne "Please select type of installation:\n\n
   Full install: Installs full featured desktop enviroment, with added apps and themes needed for everyday use\n
@@ -312,6 +354,7 @@ userinfo
 clear
 logo
 desktopenv
+networkset
 # Set fixed options that installation uses if user choses server installation
 set_option INSTALL_TYPE MINIMAL
 set_option AUR_HELPER NONE
@@ -328,11 +371,33 @@ logo
 diskpart
 clear
 logo
+dualboot
+clear
+logo
 filesystem
 clear
 logo
-networkset
+clear
+logo
+audioserv
+clear
+logo
 timezone
 clear
 logo
+bluetooth
+clear
+logo
+printercomp
+clear
+logo
+codelib
+clear
+logo
 keymap
+clear
+logo
+needed_fonts
+clear
+logo
+extra_packages

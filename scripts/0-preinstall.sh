@@ -18,7 +18,7 @@ source $CONFIGS_DIR/user_pref.conf
 iso=$(curl -4 ifconfig.co/country-iso)
 timedatectl set-ntp true
 pacman -S --noconfirm archlinux-keyring #update keyrings to latest to prevent packages failing to install
-pacman -S --noconfirm --needed pacman-contrib terminus-font
+pacman -S --noconfirm --needed pacman-contrib
 setfont ter-v22b
 sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
 pacman -S --noconfirm --needed reflector rsync grub
@@ -124,7 +124,7 @@ elif [[ "${FS}" == "luks" ]]; then
     mount -t btrfs ${partition3} /mnt
     subvolumesetup
 # store uuid of encrypted partition for grub
-    echo ENCRYPTED_PARTITION_UUID=$(blkid -s UUID -o value ${partition3}) >> $CONFIGS_DIR/setup.conf
+    echo ENCRYPTED_PARTITION_UUID=$(blkid -s UUID -o value ${partition3}) >> $CONFIGS_DIR/user_pref.conf
 fi
 
 # mount target
@@ -145,7 +145,7 @@ echo -ne "
 "
 pacstrap /mnt base base-devel linux linux-firmware vim nano sudo archlinux-keyring wget libnewt --noconfirm --needed
 echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
-cp -R ${SCRIPT_DIR} /mnt/root/ArchTitus
+cp -R ${SCRIPT_DIR} /mnt/root/ArchPerf
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 
 genfstab -L /mnt >> /mnt/etc/fstab

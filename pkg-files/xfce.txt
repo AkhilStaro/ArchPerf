@@ -1,0 +1,5 @@
+xfce4
+xfce-goodies
+lightdm
+lightdm-gtk-greeter
+--END OF MINIMAL INSTALL--

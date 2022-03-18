@@ -11,24 +11,53 @@ echo -ne "
 ----------------------------------------------------
 "
 
-source $HOME/ArchTitus/configs/user_pref.conf
+source $HOME/ArchPerf/configs/user_pref.conf
 echo -ne "
 -------------------------------------------------------------------------
-                    Network Setup 
+                           Network Setup 
 -------------------------------------------------------------------------
 "
 pacman -S --noconfirm --needed ${NETWORK_SET}
 
-if [[ ! ${NETWORK_SET} == NetworkManager ]]; then
+if [[  ${NETWORK_SET} == NetworkManager ]]; then
   sudo pacman -S -noconfirm --needed networkmanager network-manager-applet
   systemctl enable --now NetworkManager
 fi
 
-if [[ ! ${NETWORK_SET} == Dhclient ]]; then
+if [[  ${NETWORK_SET} == Dhclient ]]; then
   netdevice=$(ip link | awk -F: '$0 !~ "lo|vir|wl|^[^0-9]"{print $2;getline}')
   pacman -S -noconfirm --needed dhclient
   systemctl enable --now dhclient@"$netdevice"
 echo -ne "Your dhclient need some configuration and, for now the script has only turned on the dhc service"
+fi
+
+echo -ne "
+-------------------------------------------------------------------------
+                           Bluetooth Setup
+-------------------------------------------------------------------------
+"
+if [[  ${BLUETOOTH} == Yes ]]; then
+  sudo pacman -S -noconfirm --needed bluez bluez-libs bluez-utils
+  systemctl enable --now bluetooth
+fi
+
+echo -ne "
+-------------------------------------------------------------------------
+                           Printing Setup
+-------------------------------------------------------------------------
+"
+if [[  ${PRINTING} == Yes ]]; then
+  sudo pacman -S -noconfirm --needed cups
+  systemctl enable --now cups
+fi
+
+echo -ne "
+-------------------------------------------------------------------------
+                            DualBoot Setup
+-------------------------------------------------------------------------
+"
+if [[  ${DUALBOOT} == Yes ]]; then
+  sudo pacman -S -noconfirm --needed os-prober
 fi
 
 echo -ne "
@@ -87,7 +116,7 @@ echo -ne "
 # sed $INSTALL_TYPE is using install type to check for MINIMAL installation, if it's true, stop
 # stop the script and move on, not installing any more packages below that line
 if [[ ! $DESKTOP_ENV == server ]]; then
-  sed -n '/'$INSTALL_TYPE'/q;p' $HOME/ArchTitus/pkg-files/pacman-pkgs.txt | while read line
+  sed -n '/'$INSTALL_TYPE'/q;p' $HOME/ArchPerf/pkg-files/pacman-pkgs.txt | while read line
   do
     if [[ ${line} == '--END OF MINIMAL INSTALL--' ]]; then
       # If selected installation type is FULL, skip the --END OF THE MINIMAL INSTALLATION-- line
@@ -134,7 +163,7 @@ elif grep -E "Intel Corporation UHD" <<< ${gpu_type}; then
 fi
 
 #SETUP IS WRONG THIS IS RUN
-if ! source $HOME/ArchTitus/configs/setup.conf; then
+if ! source $HOME/ArchPerf/configs/user_pref.conf; then
 	# Loop through user input until the user gives a valid username
 	while true
 	do 
@@ -147,7 +176,7 @@ if ! source $HOME/ArchTitus/configs/setup.conf; then
 		fi 
 		echo "Incorrect username."
 	done 
-# convert name to lowercase before saving to setup.conf
+# convert name to lowercase before saving to user_pref.conf
 echo "username=${username,,}" >> ${HOME}/ArchPerf/configs/user_pref.conf
 
     #Set Password
@@ -176,13 +205,25 @@ fi
 
 echo -ne "
 -------------------------------------------------------------------------
+                          Installing Fonts
+-------------------------------------------------------------------------
+"
+  sudo pacman -S -noconfirm --needed ${FONTS}
+
+echo -ne "
+-------------------------------------------------------------------------
+                          Installing Your Desired Extra Packages
+-------------------------------------------------------------------------
+"
+  sudo pacman -S -noconfirm --needed ${EXPACKAGES}
+
+echo -ne "
+-------------------------------------------------------------------------
                     Adding User
 -------------------------------------------------------------------------
 "
-if [ $(whoami) = "root"  ]; then
-    groupadd libvirt
-    useradd -m -G wheel,libvirt -s /bin/bash $USERNAME 
-    echo "$USERNAME created, home directory created, added to wheel and libvirt group, default shell set to /bin/bash"
+if [ $(whoami) = "root"  ]; then 
+    echo "$USERNAME created, home directory created, default shell set to /bin/bash"
 
 # use chpasswd to enter $USERNAME:$password
     echo "$USERNAME:$PASSWORD" | chpasswd
