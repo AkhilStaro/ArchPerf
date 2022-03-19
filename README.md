@@ -112,10 +112,9 @@ json-c
 json-glib             
 
 ### Future Features
-1. The spript will let you choose your desired shell and assign it as default
 2. The script will let you choose window managers too
 3. The script will let you choose a config to appy on your installation
-4. Not sure about this one but, if possible the script will let you clone your own config files from github and appy them
+4. Not sure about this one but, if possible the script will let you clone your own config files from github and alppy them
 5. Add my own rice(customization) of Qtile+xfce hybrid
 
 ### No Wifi
