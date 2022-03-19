@@ -43,6 +43,16 @@ fi
 
 echo -ne "
 -------------------------------------------------------------------------
+                            Audio Setup
+-------------------------------------------------------------------------
+"
+if [[  ${AUDIO_SERV} == pipewire ]]; then
+  sudo pacman -S -noconfirm --needed pipewire pipewire-pule pipewire-alsa pipewire-media-session
+  systemctl enable --now pipewire
+fi
+
+echo -ne "
+-------------------------------------------------------------------------
                            Printing Setup
 -------------------------------------------------------------------------
 "

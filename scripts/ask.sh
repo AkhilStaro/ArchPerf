@@ -310,7 +310,7 @@ audioserv () {
   options=(pulseaudio pipewire)
   select_option $? 4 "${options[@]}"
   audio_serv=${options[$?]}
-  set_option audio_serv $audio_serv
+  set_option AUDIO_SERV $audio_serv
 }
 
 bluetooth () {
@@ -327,6 +327,14 @@ printercomp () {
   select_option $? 4 "${options[@]}"
   printer_comp=${options[$?]}
   set_option PRINTING $printer_comp
+}
+
+favshell () {
+  echo -ne "Please select your Favourite Shell(If you don't know, choose bash):\n"
+  options=(fish zsh bash)
+  select_option $? 4 "${options[@]}"
+  fav_shell=${options[$?]}
+  set_option FAV_SHELL $fav_shell
 }
 
 dualboot () {
@@ -369,6 +377,9 @@ fi
 clear
 logo
 diskpart
+clear
+logo
+favshell
 clear
 logo
 dualboot
