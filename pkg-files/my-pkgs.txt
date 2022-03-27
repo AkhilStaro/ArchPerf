@@ -1,0 +1,6 @@
+--AUR--
+picom-ibhagwan-git
+gotop
+
+--PACMAN--
+alacritty

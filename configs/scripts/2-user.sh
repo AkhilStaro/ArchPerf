@@ -16,7 +16,7 @@ echo -ne "
                Installing AUR Helper
 ----------------------------------------------------
 "
-source $HOME/ArchPerf/configs/install_conf.conf
+source $HOME/ArchPerf/configs/user_pref.conf
 
 sed -n '/'$INSTALL_TYPE'/q;p' ~/ArchPerf/pkg-files/${DESKTOP_ENV}.txt | while read line
 do
@@ -58,15 +58,6 @@ if [[ $INSTALL_TYPE == "FULL" ]]; then
     ./dotfiles-openbox/install-titus.sh
   fi
 fi
-
-echo -ne "
--------------------------------------------------------------------------
-           Installing your desired shell and making it default
--------------------------------------------------------------------------
-"
-pacman -S --noconfirm --needed ${FAV_SHELL}
-chsh -s /usr/bin/$FAV_SHELL $USERNAME
-chsh -s /usr/bin/$FAV_SHELL root
 
 echo -ne "
 -------------------------------------------------------------------------

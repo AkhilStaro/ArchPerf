@@ -14,20 +14,23 @@ echo -ne "
 Setting up mirrors for optimal download
 "
 
-source $CONFIGS_DIR/install_conf.conf
+source $CONFIGS_DIR/user_pref.conf
+iso=$(curl -4 ifconfig.co/country-iso)
+timedatectl set-ntp true
 pacman -S --noconfirm archlinux-keyring #update keyrings to latest to prevent packages failing to install
 pacman -S --noconfirm --needed pacman-contrib
+setfont ter-v22b
 sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
-pacman -S --noconfirm --needed reflector rsync
+pacman -S --noconfirm --needed reflector rsync grub
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 
 echo -ne "
 -------------------------------------------------------------------------
-            Setting up ${REGION} mirrors for faster downloads
+                    Setting up $iso mirrors for faster downloads
 -------------------------------------------------------------------------
 "
 
-reflector --download-timeout 59 -a 48 -c ${REGION} -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
+reflector -a 48 -c $iso -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
 mkdir /mnt &>/dev/null # Hiding error message if any
 
 echo -ne "
@@ -135,13 +138,12 @@ if ! grep -qs '/mnt' /proc/mounts; then
     echo "Rebooting in 1 Second ..." && sleep 1
     reboot now
 fi
-
 echo -ne "
 -------------------------------------------------------------------------
                     Arch Install on Main Drive
 -------------------------------------------------------------------------
 "
-pacstrap /mnt base base-devel ${KERNEL} linux-firmware vim nano sudo archlinux-keyring wget libnewt --noconfirm --needed
+pacstrap /mnt base base-devel linux linux-firmware vim nano sudo archlinux-keyring wget libnewt --noconfirm --needed
 echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
 cp -R ${SCRIPT_DIR} /mnt/root/ArchPerf
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
@@ -184,3 +186,4 @@ echo -ne "
 -------------------------------------------------------------------------
                     SYSTEM READY FOR 1-setup.sh
 -------------------------------------------------------------------------
+"

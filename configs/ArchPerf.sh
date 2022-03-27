@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 # Find Script Directories
 set -a
@@ -18,7 +18,7 @@ echo -ne "
 ----------------------------------------------------
 "
 ( bash $SCRIPT_DIR/scripts/ask.sh )|& tee ask.log
-      source $CONFIGS_DIR/install_config.conf
+      source $CONFIGS_DIR/user_pref.conf
     ( bash $SCRIPT_DIR/scripts/0-preinstall.sh )|& tee 0-preinstall.log
     ( arch-chroot /mnt $HOME/ArchPerf/scripts/1-setup.sh )|& tee 1-setup.log
     if [[ ! $DESKTOP_ENV == server ]]; then

@@ -16,6 +16,7 @@ xdg-user-dirs
 bison
 ntp
 --END OF MINIMAL INSTALL--
+bash-completion
 bridge-utils
 btrfs-progs
 dialog
@@ -39,6 +40,7 @@ m4
 make
 neofetch
 ntfs-3g
+ntp
 openbsd-netcat
 openssh
 p7zip
@@ -48,3 +50,17 @@ ufw
 unrar
 unzip
 which
+python-notify2
+python-psutil
+python-pyqt5
+python-pip
+java-environment-common
+java-runtime-common
+jbig2dec
+jdk8-openjdk
+jfsutils
+jre8-openjdk
+jre8-openjdk-headless
+js78
+json-c
+json-glib

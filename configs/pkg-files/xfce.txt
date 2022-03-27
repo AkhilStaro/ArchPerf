@@ -2,5 +2,4 @@ xfce4
 xfce-goodies
 lightdm
 lightdm-gtk-greeter
-lightdm-webkit2-greeter
 --END OF MINIMAL INSTALL--

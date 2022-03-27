@@ -11,8 +11,7 @@ echo -ne "
 ----------------------------------------------------
 "
 
-source $HOME/ArchPerf/configs/install_conf.conf
-
+source $HOME/ArchPerf/configs/user_pref.conf
 echo -ne "
 -------------------------------------------------------------------------
                            Network Setup 
@@ -29,7 +28,7 @@ if [[  ${NETWORK_SET} == Dhclient ]]; then
   netdevice=$(ip link | awk -F: '$0 !~ "lo|vir|wl|^[^0-9]"{print $2;getline}')
   pacman -S -noconfirm --needed dhclient
   systemctl enable --now dhclient@"$netdevice"
-echo -ne "Your dhclient might need some configuration, for now the script has only turned on the dhc service"
+echo -ne "Your dhclient need some configuration and, for now the script has only turned on the dhc service"
 fi
 
 echo -ne "
@@ -44,22 +43,6 @@ fi
 
 echo -ne "
 -------------------------------------------------------------------------
-                            Audio Setup
--------------------------------------------------------------------------
-"
-if [[  ${AUDIO_SERV} == pipewire ]]; then
-  pacman -S -noconfirm --needed pipewire pipewire-pule pipewire-alsa pipewire-media-session
-  systemctl --user enable --now pipewire
-  systemctl --user enable --now pipewire-pulse.service
-  systemctl --user enable --now pipewire-pulse.socket
-else
-  pacman -S --noconfirm --needed pulseaudio pulseaudio-bluetooth pulseaudio-alsa pulseaudio-lirc pulseaudio-zeroconf pavucontrol
-
-  systemctl --user enable --now pulseaudio
-fi
-
-echo -ne "
--------------------------------------------------------------------------
                            Printing Setup
 -------------------------------------------------------------------------
 "
@@ -68,12 +51,12 @@ if [[  ${PRINTING} == Yes ]]; then
   systemctl enable --now cups
 fi
 
-if [[  ${DUALBOOT} == Yes ]]; then
 echo -ne "
 -------------------------------------------------------------------------
                             DualBoot Setup
 -------------------------------------------------------------------------
 "
+if [[  ${DUALBOOT} == Yes ]]; then
   sudo pacman -S -noconfirm --needed os-prober
 fi
 
@@ -108,10 +91,15 @@ echo -ne "
 sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 timedatectl --no-ask-password set-timezone ${TIMEZONE}
+timedatectl --no-ask-password set-ntp 1
 localectl --no-ask-password set-locale LANG="en_US.UTF-8" LC_TIME="en_US.UTF-8"
 ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 # Set keymaps
 localectl --no-ask-password set-keymap ${KEYMAP}
+
+# Add sudo no password rights
+sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
+sed -i 's/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
 
 #Add parallel downloading
 sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
@@ -164,14 +152,14 @@ echo -ne "
 # Graphics Drivers find and install
 gpu_type=$(lspci)
 if grep -E "NVIDIA|GeForce" <<< ${gpu_type}; then
-    pacman -S --noconfirm --needed nvidia xf86-video-noveau libva-mesa-driver
+    pacman -S --noconfirm --needed nvidia
 	nvidia-xconfig
 elif lspci | grep 'VGA' | grep -E "Radeon|AMD"; then
-    pacman -S --noconfirm --needed xf86-video-amdgpu xf86-video-ati vulkan-radeon libva-mesa-driver
+    pacman -S --noconfirm --needed xf86-video-amdgpu
 elif grep -E "Integrated Graphics Controller" <<< ${gpu_type}; then
-    pacman -S --noconfirm --needed libva-intel-driver vulkan-intel intel-media-driver
+    pacman -S --noconfirm --needed libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
 elif grep -E "Intel Corporation UHD" <<< ${gpu_type}; then
-    pacman -S --needed --noconfirm libva-intel-driver vulkan-intel intel-media-driver
+    pacman -S --needed --noconfirm libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
 fi
 
 #SETUP IS WRONG THIS IS RUN
@@ -217,7 +205,14 @@ fi
 
 echo -ne "
 -------------------------------------------------------------------------
-                Installing Your Desired Extra Packages
+                          Installing Fonts
+-------------------------------------------------------------------------
+"
+  sudo pacman -S -noconfirm --needed ${FONTS}
+
+echo -ne "
+-------------------------------------------------------------------------
+                          Installing Your Desired Extra Packages
 -------------------------------------------------------------------------
 "
   sudo pacman -S -noconfirm --needed ${EXPACKAGES}
@@ -233,9 +228,6 @@ if [ $(whoami) = "root"  ]; then
 # use chpasswd to enter $USERNAME:$password
     echo "$USERNAME:$PASSWORD" | chpasswd
     echo "$USERNAME password set"
-
-    echo "root:$RPASSWORD" | chpasswd
-    echo "root password set"
 
 	cp -R $HOME/ArchPerf /home/$USERNAME/
     chown -R $USERNAME: /home/$USERNAME/ArchPerf
